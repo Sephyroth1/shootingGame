@@ -1,0 +1,33 @@
+# Python Bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environment
+venv/
+env/
+shooting_game/
+
+# Editor/IDE files
+.vscode/
+.idea/
+
+# PyCharm
+*.iml
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Build and Distribution files
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# Miscellaneous
+.DS_Store  # macOS specific
+Thumbs.db  # Windows specific
+*.bak  # Backup files
+*.swp  # Swap files
