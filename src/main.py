@@ -34,21 +34,23 @@ class Game:
         self.create_enemies()
 
     def create_enemies(self):
-        num_of_enemies = random.randint(0, 10)
+        enemy_created = []
+        num_of_enemies = random.randint(1, 10)
         level_choice = [1, 2, 3, 4, 5]
         color_choice = ["Black", "Blue", "Green", "Red"]
         enemies_created = []
         for i in range(num_of_enemies):
             rand_level = random.choice(level_choice)
             rand_color = random.choice(color_choice)
-            enemy_x = random.randint(0, 1280)
-            enemy_y = random.randint(0, 720)
             enemy_width = Image.open(
                 f"assets/PNG/Enemies/enemy{rand_color}{rand_level}.png"
             ).size[0]
             enemy_height = Image.open(
                 f"assets/PNG/Enemies/enemy{rand_color}{rand_level}.png"
             ).size[1]
+
+            enemy_x = random.randint(0 - enemy_width, 1280 - enemy_height)
+            enemy_y = 0 + enemy_height
 
             overlap = False
 
@@ -64,15 +66,18 @@ class Game:
                 i -= 1
                 continue
 
-        enemy = Enemy(
-            enemy_x, enemy_y, f"assets/PNG/Enemies/enemy{rand_color}{rand_level}.png"
-        )
+            enemy = Enemy(
+                enemy_x,
+                enemy_y,
+                f"assets/PNG/Enemies/enemy{rand_color}{rand_level}.png",
+            )
 
-        self.enemies.add(enemy)
-        self.all_sprites.add(enemy)
+            enemies_created.append((enemy_x, enemy_y))
+            self.enemies.add(enemy)
+            self.all_sprites.add(enemy)
 
     def create_obstacles(self):
-        num_of_meteors = random.randint(0, 10)
+        num_of_meteors = random.randint(0, 5)
         size_choice = ["big", "med", "small", "tiny"]
         color_choice = ["Grey", "Brown"]
         level_choice = [1, 2]
@@ -151,6 +156,10 @@ class Game:
                 if pg.sprite.spritecollide(proj, self.enemies, True):
                     self.score += 1
                     proj.kill()
+                if pg.sprite.spritecollide(proj, self.meteors, False):
+                    proj.speed = -proj.speed
+                    proj.image = pg.transform.rotate(proj.image, 180)
+                    proj.rect = proj.image.get_rect(center=proj.rect.center)
 
             for enemy in self.enemies:
                 if self.ship.rect.colliderect(enemy):

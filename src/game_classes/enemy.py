@@ -12,3 +12,19 @@ class Enemy(pg.sprite.Sprite):
         self.rect.center = (x, y)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
+        self.speed = 2
+
+    def update(self):
+        self.rect.y += self.speed
+
+        if self.rect.left < 0:
+            self.rect.left = 0
+            self.speed = -self.speed
+        if self.rect.right > 1280:
+            self.rect.right = 1280
+            self.speed = -self.speed
+        if self.rect.top < 0:
+            self.speed = -self.speed
+        if self.rect.bottom > 720:
+            self.rect.bottom = 720
+            self.speed = -self.speed
