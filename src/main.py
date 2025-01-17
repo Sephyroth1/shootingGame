@@ -30,6 +30,9 @@ class Game:
         self.font = pg.font.Font("assets/Bonus/kenvector_future_thin.ttf", 36)
         self.text = f"Score: {self.score}"
         self.text_position = (self.width - 225, 0)
+        self.end_text = f"You Win!, Your Score: {self.score}"
+        self.end_text_position = (self.width // 2, self.height // 2)
+        self.end_lose_text = f"You Lose!, Your Score: {self.score}"
         self.create_obstacles()
         self.create_enemies()
 
@@ -161,13 +164,28 @@ class Game:
                     proj.image = pg.transform.rotate(proj.image, 180)
                     proj.rect = proj.image.get_rect(center=proj.rect.center)
 
+            end_text_surface = self.font.render(self.end_text, True, (255, 255, 255))
+            end_lost_text_surface = self.font.render(
+                self.end_lose_text, True, (255, 255, 255)
+            )
+
             for enemy in self.enemies:
                 if self.ship.rect.colliderect(enemy):
+                    self.screen.blit(end_lost_text_surface, self.end_text_position)
+                    pg.display.update()
+                    pg.time.delay(1000)
                     self.ship.kill()
                     enemy.kill()
 
+            if not self.enemies:
+                self.screen.blit(end_text_surface, self.end_text_position)
+                pg.display.update()
+                pg.time.delay(1000)
+                self.ship.kill()
+
             for wall in self.meteors:
                 if self.ship.rect.colliderect(wall):
+                    self.screen.blit(end_lost_text_surface, self.end_text_position)
                     self.ship.kill()
 
             self.text = f"Score: {self.score}"
